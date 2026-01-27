@@ -55,7 +55,10 @@ Figure 1 - Figure 1 - A preview of four various chart types created with JFreeCh
 
 This section provides the steps for completing the lab. It is important to note that the lab should be done in a group as previously mentioned.
 
-**Important**: When working with JFreeChart, it is crucial to use the correct version of supporting libraries such as Java SE, JUnit, and JMock. Incorrect versions can cause compatibility issues and prevent your code from running correctly. Before beginning the assignment, make sure to verify the version of Java SE you are using and ensure that it is compatible with JUnit 4.11. Additionally, check the compatibility information for JMock to ensure it works with your Java version and JUnit 4.11. By taking the time to check the versions of these libraries, you can ensure a successful and efficient development process.
+**Important**: This lab uses **JUnit 5 (Jupiter)** for unit testing and **Mockito** for mocking.  
+All required JAR files are provided in the **assignment artifact package**. Do **not** add JUnit from Eclipse and do **not** use JUnit 4 or .  
+Make sure your project uses **JavaSE-1.8 (Java 8)** as shown in the setup steps.
+
 
 ## 2.1 Familiarization
 
@@ -81,7 +84,7 @@ Ensure that everyone understands the concepts in this section before moving on t
 
 1.  The _Java Settings_ dialog should now be displayed. This dialog has five tabs along the top: _Source_, _Projects_, _Libraries_, _Order and Export_ and _Module Dependencies_. Move to the _Libraries_ tab, and click the _Add External JARs (or Libraries)…_ button.
 
-2.  Select the _jfreechart.jar_ file from the known location that you already extracted in and click _Open_. Click _Add External Libraries_… again, this time add all the .jar files from the _lib_ and _lib/jMock_ directory where you have unzipped the _JFreeChart v1.0.zip_ file. The Java Settings dialog should now look like Figure 2, below.
+2.  Select the _jfreechart.jar_ file from the known location that you already extracted in and click _Open_. Click _Add External Libraries_… again, this time add all the .jar files from the _lib_ and _lib/Mockito_ directory where you have unzipped the _JFreeChart v1.0.zip_ file. The Java Settings dialog should now look like Figure 2, below.
 
 <img src="media/externalLibraries.png" alt="externalLibraries.png" width="360"/>
 
@@ -129,34 +132,25 @@ To create a test suite containing a single unit test in JUnit, follow these step
 ```java
 package org.jfree.data.test;
 
-import static org.junit.Assert.*; import org.jfree.data.Range; import org.junit.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.jfree.data.Range;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class RangeTest {
     private Range exampleRange;
-    @BeforeClass public static void setUpBeforeClass() throws Exception {
+
+    @BeforeEach
+    void setUp() {
+        exampleRange = new Range(-1, 1);
     }
-
-
-    @Before
-    public void setUp() throws Exception { exampleRange = new Range(-1, 1);
-    }
-
 
     @Test
-    public void centralValueShouldBeZero() {
-        assertEquals("The central value of -1 and 1 should be 0",
-        0, exampleRange.getCentralValue(), .000000001d);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
+    void centralValueShouldBeZero() {
+        assertEquals(0.0, exampleRange.getCentralValue(), 1e-9,
+                "The central value of -1 and 1 should be 0");
     }
 }
-
 ```
 
 1.  Now that you have a completed test case, run the test class. To do this,
@@ -199,44 +193,35 @@ This section is recommended to be performed as a group, however the work may be 
 
 Note that some methods in DataUtilities use the interfaces Values2D and KeyedValues. Although there may be other ways, in order to test these methods for this lab, you should utilize Mocking to test DataUtilities. Because the methods take in interfaces as parameters, you will not know how the inherited classes may function. Mocking allows us to return any values or throw any exceptions we want, when we want. Even so, you may find drawbacks to this approach; you should discuss these in your report.
 
-To get you started, include the following example (that follows jMock notation) in your DataUtilities test code: Note that you can use any mocking framework, but the example given here are in jMock.
+To get you started, include the following example (that follows Mockito notation) in your DataUtilities test code: Note that you can use any mocking framework, but the example given here are in Mockito.
 
 ```java
 package org.jfree.data.test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import org.jfree.data.DataUtilities;
 import org.jfree.data.Values2D;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class DataUtilitiesTest extends DataUtilities {
+public class DataUtilitiesMockTest {
 
-	 @Test
-	 public void calculateColumnTotalForTwoValues() {
-	     // setup
-	     Mockery mockingContext = new Mockery();
-	     final Values2D values = mockingContext.mock(Values2D.class);
-	     mockingContext.checking(new Expectations() {
-	         {
-	             one(values).getRowCount();
-	             will(returnValue(2));
-	             one(values).getValue(0, 0);
-	             will(returnValue(7.5));
-	             one(values).getValue(1, 0);
-	             will(returnValue(2.5));
-	         }
-	     });
-	     double result = DataUtilities.calculateColumnTotal(values, 0);
-	     // verify
-	     assertEquals(result, 10.0, .000000001d);
-	     // tear-down: NONE in this test method
-	 }
+    @Test
+    void calculateColumnTotal_TwoRows_ShouldSumValues() {
+        // Arrange
+        Values2D values = mock(Values2D.class);
+        when(values.getRowCount()).thenReturn(2);
+        when(values.getValue(0, 0)).thenReturn(7.5);
+        when(values.getValue(1, 0)).thenReturn(2.5);
 
+        // Act
+        double result = DataUtilities.calculateColumnTotal(values, 0);
+
+        // Assert
+        assertEquals(10.0, result, 1e-9);
+    }
 }
-
 ```
 
 > **Note**: that a better implementation would include the Mockery and Values2D objects being initialized in the setUp() method of your test class.
