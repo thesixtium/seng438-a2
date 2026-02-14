@@ -8,6 +8,11 @@ import org.jfree.data.Values2D;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+// Testing the calculateColumnTotal method in DataUtilities class
+// In order of the tests:
+// - All valid values: should pass
+// - Testing out of bound columns to see if error is thrown
+// - Testing null values
 public class DataUtilitiesCalculateColumnTotalTest {
 	private Values2D values;
 	
