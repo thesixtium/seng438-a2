@@ -10,6 +10,6 @@ import org.junit.runner.RunWith;
 	GetCumulativePercentagesTests.class,
 	DataUtCreateNumArr2D.class,
 	DataUtilitiesCalculateColumnTotalTest.class,
-	DataUtilitiesRowTotalTest.class,
+	DataUtilitiesRowTotalTest.class
 	})
 public class DataUtilitiesTest extends DataUtilities {}
