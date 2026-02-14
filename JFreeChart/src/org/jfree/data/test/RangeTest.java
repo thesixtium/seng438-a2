@@ -12,6 +12,8 @@ import org.junit.runner.RunWith;
 @Suite.SuiteClasses({
 	CombineTests.class,
     RangeConstrainTest.class,
-    RangeExpandTest.class
+    RangeExpandTest.class,
+	Range_contains_test.class,
+	RangeEqualsTest.class
 	})
 public class RangeTest extends Range {}
