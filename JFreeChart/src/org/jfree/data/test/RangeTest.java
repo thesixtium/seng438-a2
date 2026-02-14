@@ -4,18 +4,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.jfree.data.Range;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.jfree.data.test.range.*;
+import org.junit.runners.Suite;
+import org.junit.runner.RunWith;
 
-public class RangeTest {
-    private Range exampleRange;
-
-    @BeforeEach
-    void setUp() {
-        exampleRange = new Range(-1, 1);
-    }
-
-    @Test
-    void centralValueShouldBeZero() {
-        assertEquals(0.0, exampleRange.getCentralValue(), 1e-9,
-                "The central value of -1 and 1 should be 0");
-    }
-}
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+	CombineTests.class,
+    RangeConstrainTest.class,
+    RangeExpandTest.class
+	})
+public class RangeTest extends Range {}
