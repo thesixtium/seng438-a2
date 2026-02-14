@@ -7,7 +7,9 @@ import org.junit.runner.RunWith;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	GetCumulativePercentagesTests.class
-	DataUtCreateNumArr2D.class
+	GetCumulativePercentagesTests.class,
+	DataUtCreateNumArr2D.class,
+	DataUtilitiesCalculateColumnTotalTest.class,
+	DataUtilitiesRowTotalTest.class,
 	})
 public class DataUtilitiesTest extends DataUtilities {}
