@@ -6,6 +6,13 @@ import org.jfree.data.Range;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+// Testing the expand method in Range class
+// In order of the tests:
+// - All valid values: should pass
+// - Testing null values
+// - Testing a non numeric number
+// - Testing negative margin: should pass
+// - Testing zero range: should pass
 public class RangeExpandTest {
     private Range oldRange;
     private Range newRange;
